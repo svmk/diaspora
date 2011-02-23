@@ -2,35 +2,66 @@
 -#   licensed under the Affero General Public License version 3 or later.  See
 -#   the COPYRIGHT file.
 
-.container{:style => "position:relative;"}
-  - if current_user
-    = link_to image_tag('logo_no_alpha.png', :height => 16, :width => 98, :class => "diaspora_header_logo"), root_path
-  - else
-    = link_to image_tag('logo_large.png', :height => "32px", :width => "321px", :class => "diaspora_header_logo"), root_path
+- if current_user
+  = link_to image_tag('logo_no_alpha.png', :height => 16, :width => 98, :class => "diaspora_header_logo"), root_path
+- else
+  = link_to image_tag('logo_large.png', :height => "32px", :width => "321px", :class => "diaspora_header_logo"), root_path
 
-  - if !current_user
-    .right
-      %ul#landing_nav
-        %li= link_to '@joindiaspora', "http://twitter.com/joindiaspora"
-        %li= link_to 'github', "https://github.com/diaspora/diaspora"
-        %li= link_to t('.blog'), 'http://blog.joindiaspora.com/'
-        %li= link_to t('.login'), new_user_session_path, :class => 'login'
+- if !current_user
+  .right
+    %ul#landing_nav
+      %li= link_to '@joindiaspora', "http://twitter.com/joindiaspora"
+      %li= link_to 'github', "https://github.com/diaspora/diaspora"
+      %li= link_to t('.blog'), 'http://blog.joindiaspora.com/'
+      %li= link_to t('.login'), new_user_session_path, :class => 'login'
 
-  - elsif (current_user || !@landing_page)
-    - if @notification_count
+- elsif (current_user || !@landing_page)
+  - if @notification_count
+    - if false
+      %br
       #notification_badge
         = link_to "", notifications_path, :title => new_notification_text(@notification_count)
         = image_tag 'icons/mail_grey.png'
-        #notification_badge_number{:class => ("hidden" if @notification_count == 0)}
+        .badge_number{:class => ("hidden" if @notification_count == 0)}
           = @notification_count
 
-    %ul#user_menu
-      .right
-        ▼
-      .avatar
-        = owner_image_tag(:thumb_small)
-      = link_to current_user.name, '#'
-      %li= link_to t('.profile'), current_user.person
-      %li= link_to t('.account'), edit_user_path(current_user)
-      %li= link_to t('.logout'), destroy_user_session_path
+    /#request_badge
+    /  = link_to "", notifications_path, :title => @request_count
+    /  = image_tag 'icons/mail_grey.png'
+    /  .badge_number{:class => ("hidden" if @request_count == 0)}
+    /    = @request_count
 
+  %ul#user_menu
+    .right
+      ▼
+    .avatar
+      = owner_image_tag(:thumb_small)
+    = link_to current_user.name, '#'
+    %li= link_to t('.profile'), current_user.person
+    %li= link_to t('.account'), edit_user_path(current_user)
+    %li= link_to t('.logout'), destroy_user_session_path
+
+= render 'aspects/aspect_listings', :aspects => @aspects, :contacts => @contacts
+
+%br
+
+#left_search
+  = form_tag(people_path, :method => 'get', :id => "global_search_form") do
+    = text_field_tag 'q', nil, :placeholder => 'People', :type => 'search', :results => 5
+
+%br
+%br
+
+#header_user_info
+  = owner_image_tag
+  = link_to current_user.person.name, current_user.person
+
+
+
+%br
+
+- if @notification_count > 0 || @request_count > 0
+  #new_requests
+    - if @request_count > 0
+      %h4
+        = new_request_link(@request_count)

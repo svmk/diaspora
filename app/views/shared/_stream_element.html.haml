@@ -3,6 +3,9 @@
 -#   the COPYRIGHT file.
 
 .stream_element{:data=>{:guid=>post.id}}
+
+  = image_tag 'tick.png', :class => 'tick'
+
   - if post.person.owner_id == current_user.id
     .right.hidden.controls
       - reshare_aspects = aspects_without_post(all_aspects, post)

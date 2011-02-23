@@ -9,3 +9,7 @@
         %li
           = person_image_tag(contact.person, :thumb_small)
           = link_to contact.person.name, contact.person, :class => 'contact_name'
+  - else
+    %ul.aspect_contacts
+      %li
+        = link_to '+ add contact', edit_aspect_path(aspect), :rel => 'facebox', :class => 'add_new_contact'

@@ -2,11 +2,11 @@
 -#   licensed under the Affero General Public License version 3 or later.  See
 -#   the COPYRIGHT file.
 
-= hidden_field_tag :contact_json, @selected_contacts.map{|contact| contact.person}.to_json
+/= hidden_field_tag :contact_json, @selected_contacts.map{|contact| contact.person}.to_json
 
 %ul#aspect_nav
   %li{:class => ('selected' if @aspect == :all)}
-    = link_to 'All Contacts', aspects_path, :class => 'home_selector'
+    = link_to 'All Aspects', aspects_path, :class => 'home_selector'
   - for aspect in @all_aspects
     = render 'aspects/aspect', :aspect => aspect, :contacts => aspect.contacts.reject{|x| x.pending == true}
   %li

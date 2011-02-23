@@ -4,12 +4,13 @@
 
 
 $blue: #3F8FBA
-$background: rgb(252,252,252)
+$background: rgb(240,240,240)
 
 body
   :padding 2em
+    :top 0
+    :left 200px
   :margin 0
-    :top 35px
   :background-color $background
 a
   :color #107FC9
@@ -120,26 +121,26 @@ form
     :margin 0
 
 header
-  :z-index 50
+  :z-index 2
   :position relative
 
   :background
-    :color #111
-    :color rgba(5,5,5,0.85)
+    :color #222
 
-  :-webkit-box-shadow 0 3px 2px #000
-  :-moz-box-shadow 0 3px 2px #000
-  :box-shadow 0 3px 2px #000
+  :-webkit-box-shadow 3px 0 3px #000
+  :-moz-box-shadow 3px 0 3px #000
+  :box-shadow 3px 0 3px #000
 
   :padding 0
     :top 1px
+    :left 8px
   :color #CCC
 
   :position fixed
-  :width 100%
+  :width 180px
   :top 0
   :left 0
-  :height 28px
+  :height 100%
 
   a
     :color #CCC
@@ -173,6 +174,8 @@ header
 
     :position absolute
     :display inline
+
+    :display none
 
     :top 5px
     :right 0
@@ -231,9 +234,11 @@ header
 
 .diaspora_header_logo
   :position relative
-  :top 6px
+  :display block
+  :top 15px
   :margin
     :right 12px
+    :bottom 30px
 
 .stream
   .stream_element
@@ -241,21 +246,15 @@ header
       :family 'arial', 'helvetica', sans-serif
     :padding 10px 14px
       :right 35px
-      :left 0
     :min-height 50px
     :border
       :bottom 1px solid #ddd
       :top 1px solid #fff
 
-    :font
-      :size 13px
-    :line
-      :height 19px
-
-
     &:hover
       :border
         :bottom 1px solid #ddd
+        :bottom 1px solid lighten($blue,25%)
       .right
         :display inline
 
@@ -543,8 +542,6 @@ ul.show_comments
   :margin 0
     :top 0.5em
   :padding 0
-  :background
-    :color #F0F4F5
 
   :font
     :size 12px
@@ -558,9 +555,9 @@ ul.show_comments
   li
     :list
       :style none
-    :padding 0.4em
+    :padding 12px
     :border
-      :bottom 2px solid $background
+      :bottom 1px solid #ccc
 
     .from
       :font
@@ -596,7 +593,6 @@ ul.show_comments
         :size 1em
 
       .submit_button
-        :display none
         input
           :margin
             :right 0
@@ -616,6 +612,8 @@ ul.show_comments
     .avatar
       :position absolute
       :display inline
+      :height 30px
+      :width 30px
 
     form.open
       .submit_button
@@ -625,6 +623,11 @@ ul.show_comments
           :right 2px
       textarea
         :min-height 2.4em
+
+#aspect_stream_container
+  ul.comments,
+  ul.show_comments
+    :display none
 
 
 .stream.show
@@ -819,8 +822,9 @@ label
   :margin
     :bottom 10px
     :top 0
-  :padding
-    :bottom 12px
+  :padding 12px 0
+    :left 20px
+    :bottom 20px
   :top 0
 
   :border
@@ -834,7 +838,7 @@ label
     form
       textarea
         :height 18px !important
-        :width 500px
+        :width 430px
 
   form
     :position relative
@@ -1037,14 +1041,21 @@ ul.aspect_contacts
     :width 16px
     :height 16px
     :top 2px
-    :left -18px
+    :left -8px
 
 ul#aspect_nav
   :padding 0
   :margin 0
+    :top 24px
+    :left -8px
+  :z-index 10
+
+  :font
+    :family 'arial', 'helvetica', sans-serif
 
   li
     :position relative
+    :width 165px
 
     &:hover
       a.edit
@@ -1054,8 +1065,8 @@ ul#aspect_nav
     :display block
     :width 100%
     :height 100%
-    :color #888
-    :padding 2px 3px
+    :color #ccc
+    :padding 2px 12px
 
   li:hover
     a.aspect_selector,
@@ -1063,34 +1074,32 @@ ul#aspect_nav
     a.add_aspect_button
       :text
         :decoration none
-      :color #555
+      :color #fff
       :background
-        :color #f9f9f9
+        :color #333
 
   a.home_selector
+    :border
+      :bottom 1px solid #333
     :margin
       :bottom 6px
 
   a.add_aspect_button
-    :color #bbb
+    :color #666
     :border
       :bottom none
-
-  a.home_selector
-    :border
-      :bottom 1px solid #999
 
   a.edit
     :display none
     :position absolute
-    :right -4px
+    :right -20px
     :top 2px
     :font
       :size smaller
     :padding 1px 4px
     :background
-      :color #eee
-    :color #aaa
+      :color #999
+    :color #555
 
     :-webkit-border-radius 3px
     :-moz-border-radius 3px
@@ -1104,27 +1113,40 @@ ul#aspect_nav
         :decoration none
 
     &:active
-      :top 5px
+      :background
+        :color #666
 
   li.selected
     ul.aspect_contacts
       :display block
 
-    a:not(.edit)
-      :color $blue
     a.aspect_selector,
     a.home_selector
       :font
         :weight bold
+      :background
+        :color $blue
+      :color #fff
+      :text-shadow 0 1px darken($blue,20%)
 
       &:hover
-        :color $blue
+        :background
+          :color lighten($blue,10%)
 
 ul#aspect_nav
+  ul
+    :margin
+      :top 2px
   li
     a.contact_name
       :padding
         :left !important 0px
+    a.add_new_contact
+      :margin
+        :left -20px
+      :font
+        :size smaller
+        :style italic
 
 #global_search
   :display inline
@@ -1634,11 +1656,13 @@ h3 span.current_gs_step
       :background
         :color #22AAE0
 
-#notification_badge
+#notification_badge,
+#request_badge
   :position relative
-  :top 5px
+  :top 7px
   :display inline
-  :margin 0 1em
+  :margin 0
+    :right 12px
   :font
     :weight bold
     :size smaller
@@ -1651,20 +1675,20 @@ h3 span.current_gs_step
     :width 20px
     :height 20px
 
-#notification_badge_number
-  :z-index 3
-  :position absolute
-  :top -10px
-  :left 11px
-  :padding 0 2px
-    :bottom 1px
-  :background
-    :color #A40802
-  :border-radius 2px
-  :line
-    :height 12px
+  .badge_number
+    :z-index 3
+    :position absolute
+    :top -10px
+    :left 11px
+    :padding 0 2px
+      :bottom 1px
+    :background
+      :color #A40802
+    :border-radius 2px
+    :line
+      :height 12px
 
-  :color #fff
+    :color #fff
 
 #profile
   ul#aspects_for_person
@@ -1824,6 +1848,8 @@ footer
   :left 0
   :bottom 0
   :color #999
+
+  :display none
 
   .container
     :margin
@@ -2457,11 +2483,13 @@ ul.show_comments
     :position static
 
 #left_search
+  :margin
+    :left 4px
   input
     :padding 4px
     :font
       :size 12px
-    :width 100%
+    :width 163px
 
 .commenters
   .avatar
@@ -2471,3 +2499,53 @@ ul.show_comments
     :float none
   :margin
     :top 6px
+
+#aspect_stream_container
+  :margin
+    :left -35px
+    :right 12px
+  :padding
+    :left 24px
+  :background
+    :color #fff
+  :-webkit-box-shadow 2px 0 3px #999
+  :border
+    :right 1px solid #ccc
+
+  :position absolute
+  :min-height 100%
+  :width 490px
+
+.fixed_side
+  :left 690px
+  :position absolute
+  :overflow-y auto
+  :overflow-x hidden
+
+  :max-height 100%
+  :max-width 600px
+  :min-width 100px
+  :margin
+    :right 8em
+  :padding
+    :right 1em
+
+.tick
+  :position absolute
+  :right -12px
+  :height 30px
+  :display none
+  
+.stream_element:hover
+  .tick
+    :display inline
+
+#header_user_info
+  .avatar
+    :height 40px
+    :width 40px
+    :display inline-block
+    :vertical
+      :align top
+    :margin
+      :right 6px

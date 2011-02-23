@@ -81,15 +81,13 @@
       - flash.each do |name, msg|
         = content_tag :div, msg, :id => "flash_#{name}"
 
-    %header{:class=>('landing' unless current_user)}
-      = render 'layouts/header'
+    -if current_user
+      %header{:class=>('landing' unless current_user)}
+        = render 'layouts/header'
 
-    .container
-      .span-24.last
-        = yield
+    = yield
 
-    .clearfix
-      /=render :partial => 'layouts/debug.haml'
+    /=render :partial => 'layouts/debug.haml'
 
     %footer
       .container

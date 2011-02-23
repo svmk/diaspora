@@ -6,33 +6,13 @@
 - content_for :head do
   = include_javascripts :home
 
-.span-4.append-1
-  = render 'aspects/aspect_listings', :aspects => @aspects, :contacts => @contacts
-
-  %br
-
-  #left_search
-    = form_tag(people_path, :method => 'get', :id => "global_search_form") do
-      = text_field_tag 'q', nil, :placeholder => 'People', :type => 'search', :results => 5
-
-  %br
-
-  - if @notification_count > 0 || @request_count > 0
-    #new_requests
-      - if @request_count > 0
-        %h4
-          = new_request_link(@request_count)
-
-  /.section
-  /  %h5
-  /    = t('shared.invitations.invite_your_friends')
-  /  = render "shared/invitations", :invites => @invites
+/.section
+/  %h5
+/    = t('shared.invitations.invite_your_friends')
+/  = render "shared/invitations", :invites => @invites
 
 
-.span-13.last
-  %h3{:style => 'margin-bottom:0;'}
-    Recent Activity
-
+.span-12
   = render 'aspects/no_contacts_message', :aspect => @aspect, :contact_count => @contacts.count
 
   #aspect_stream_container
@@ -42,3 +22,12 @@
       :posts => @posts,
       :fakes => @fakes
 
+
+.fixed_side
+  .stream_element
+    %br
+
+    %ul.comments
+      = render :partial => 'comments/comment', :collection => Post.last.comments
+      %li.comment.show
+        = new_comment_form(Post.last.id, current_user)
