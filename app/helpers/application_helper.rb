@@ -137,8 +137,8 @@ module ApplicationHelper
     "<img alt=\"#{h(person.name)}\" class=\"avatar\" #{("data-owner_id="+@user_id.to_s) if @user_id} data-person_id=\"#{person.id}\" src=\"#{person.profile.image_url(size)}\" title=\"#{h(person.name)}\">".html_safe
   end
 
-  def person_link(person)
-    "<a href='/people/#{person.id}'>
+  def person_link(person, opts={})
+    "<a href='/people/#{person.id}' class='#{opts[:class]}'>
   #{h(person.name)}
 </a>".html_safe
   end
@@ -147,7 +147,7 @@ module ApplicationHelper
     link_to string, path, :rel => 'external'
   end
 
-  def person_image_link(person, opts = {})
+  def person_image_link(person, opts={})
     return "" if person.nil? || person.profile.nil?
     if opts[:to] == :photos
       link_to person_image_tag(person, opts[:size]), person_photos_path(person)

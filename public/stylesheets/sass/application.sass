@@ -4,12 +4,9 @@
 
 
 $blue: #3F8FBA
-$background: rgb(240,240,240)
+$background: rgb(253,253,253)
 
 body
-  :padding 2em
-    :top 0
-    :left 200px
   :margin 0
   :background
     :color $background
@@ -124,7 +121,7 @@ form
 
 header
   :z-index 2
-  :position relative
+  :display none
 
   :background
     :color #222
@@ -244,8 +241,6 @@ header
 
 .stream
   .stream_element
-    :font
-      :family 'arial', 'helvetica', sans-serif
     :padding 20px 20px
     :min-height 50px
     :border
@@ -263,15 +258,14 @@ header
       :height 370px
       :width 500px
 
-    &.selected
-      :background
-        :color #eee
-      :border
-        :bottom 1px solid #999
+    time
+      :font
+        :weight normal
+        :size smaller
+      :position absolute
+      :right 20px
 
 .from
-  :text
-    :shadow 0 1px #fff
   a
     :font
       :weight bold
@@ -336,11 +330,15 @@ header
 .stream_element
   :position relative
   :word-wrap break-word
-  :color #777
+  :color #888
 
-  .from
-    h5
-      :display inline
+  :font
+    :size 14px
+
+  a.author
+    :font
+      :weight bold
+    :color #444
 
   .content
     :margin
@@ -348,17 +346,17 @@ header
     :padding
       :left 60px
 
-    :color #444
+    :color #666
     :font
       :weight normal
 
     p
       :margin
-        :bottom 6px
-      :padding
-        :right 1em
+        :bottom 0px
       :font
-        :family 'arial', 'helvetica', 'sans-serif'
+        :size 12px
+      :line
+        :height 16px
 
     .photo_attachments
       :margin
@@ -406,10 +404,10 @@ header
     &:hover
       :opacity 1
 
-.time,
 .timeago
+  :color #ccc
   a
-    :color #bbb
+    :color #ccc
   :margin
     :right 1px
   :text
@@ -556,6 +554,10 @@ ul.show_comments
   :background
     :color #F0F4F5
 
+  a.author
+    :font
+      :size 13px
+
   textarea
     :width 100%
     :height 1.4em
@@ -563,7 +565,7 @@ ul.show_comments
   li
     :list
       :style none
-    :padding 6px
+    :padding 10px
     :border
       :bottom 1px solid #ccc
 
@@ -608,9 +610,7 @@ ul.show_comments
       textarea
         :font
           :size 1em
-        :margin
-          :bottom -3px
-        :width 363px
+        :width 273px
         :min-height 23px
 
       p
@@ -637,19 +637,21 @@ ul.show_comments
   ul.show_comments
     :position relative
     :-webkit-border-radius 3px
-    :max-height 400px
 
     :overflow-y auto
     :overflow-x hidden
+
+    time
+      :right 6px
 
   .comment_pane
     :z-index 7
     :background
       :color rgba(10,10,10,0.8)
-    :padding 12px
+    :padding 10px
     :position absolute
     :top 0px
-    :left 495px
+    :left 460px
     :-webkit-border-radius 3px
     :width 336px
 
@@ -727,9 +729,10 @@ a.paginate, #infscr-loading
         :color $background
       :font
         :size 12px
-      :color #999
+      :z-index 2
+      :color #ccc
       a
-        :color #999
+        :color #ccc
         :font
           :weight normal
   &:hover
@@ -850,7 +853,6 @@ label
     :bottom 10px
     :top 0
   :padding 12px 0
-    :left 20px
     :bottom 20px
   :top 0
 
@@ -865,7 +867,7 @@ label
     form
       textarea
         :height 18px !important
-        :width 430px
+        :width 420px
 
   form
     :position relative
@@ -2161,7 +2163,7 @@ h3,h4
   :-moz-border-radius 3px
   :border-radius 3px
 
-  :display inline-block
+  :display none
 
   :font
     :size smaller
@@ -2527,27 +2529,11 @@ ul.show_comments
   :margin
     :top 6px
 
-#aspect_stream_container
-  :margin
-    :left -65px
-    :right 12px
-  :padding
-    :left 24px
-  :background
-    :color #fff
-  :-webkit-box-shadow 2px 0 5px #111
-  :border
-    :right 1px solid #333
-
-  :position absolute
-  :min-height 100%
-  :width 494px
-
 .tick
   :position absolute
-  :left -10px
+  :left -13px
   :height 30px
-  :top 0px
+  :top 7px
 
 #header_user_info
   .avatar

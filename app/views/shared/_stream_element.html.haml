@@ -13,11 +13,13 @@
   = person_image_link(post.person, :size => :thumb_small)
 
   .content
-    %strong
-      = person_link(post.person)
-    %br
+    .from
+      = person_link(post.person, :class => 'author')
+      %time.timeago{:datetime => post.created_at}
+        = link_to(how_long_ago(post), status_message_path(post))
 
-    = render 'status_messages/status_message', :post => post, :photos => post.photos
+    %p
+      = render 'status_messages/status_message', :post => post, :photos => post.photos
 
     .info
       - if post.public?
@@ -27,14 +29,6 @@
       - elsif post.person.owner_id == current_user.id
         %span.aspect_badges
           = aspect_badges(aspects_with_post(all_aspects, post))
-
-      %time.timeago{:datetime => post.created_at}
-        = link_to(how_long_ago(post), status_message_path(post))
-
-    - if post.comments.size > 0
-      .commenters
-        - for person in post.comments.map{|c| c.person}.uniq
-          = person_image_link(person)
 
     .comment_pane.hidden
       = image_tag 'tick.png', :class => 'tick'

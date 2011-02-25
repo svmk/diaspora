@@ -5,11 +5,11 @@
 %li.comment{:data=>{:guid => comment.id}, :class => ("hidden" if(defined? hidden))}
   = person_image_link(comment.person)
   .content
-    %strong
-      = person_link(comment.person)
+    .from
+      = person_link(comment.person, :class => 'author')
 
-    = markdownify(comment.text, :youtube_maps => comment.youtube_titles)
+      %time.timeago{:datetime => comment.created_at}
+        = how_long_ago(comment)
 
-    .info
-      %span.time
-        = comment.created_at ? timeago(comment.created_at) : timeago(Time.now)
+    %p
+      = markdownify(comment.text, :youtube_maps => comment.youtube_titles)

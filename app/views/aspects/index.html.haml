@@ -11,10 +11,8 @@
 /    = t('shared.invitations.invite_your_friends')
 /  = render "shared/invitations", :invites => @invites
 
-
-.span-13
+.span-11
   = render 'aspects/no_contacts_message', :aspect => @aspect, :contact_count => @contacts.count
-
   #aspect_stream_container
     = render 'aspect_stream',
       :aspect => @aspect,

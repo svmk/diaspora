@@ -85,7 +85,8 @@
       %header{:class=>('landing' unless current_user)}
         = render 'layouts/header'
 
-    = yield
+    .container
+      = yield
 
     /=render :partial => 'layouts/debug.haml'
 
