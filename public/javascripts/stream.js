@@ -7,6 +7,7 @@ var Stream = {
   initialize: function() {
     var $stream = $(".stream");
     var $publisher = $("#publisher");
+    var lastTopValue = 0;
 
     Diaspora.widgets.timeago.updateTimeAgo();
     $stream.not(".show").delegate("a.show_post_comments", "click", Stream.toggleComments);
@@ -39,14 +40,50 @@ var Stream = {
     $stream.delegate(".stream_element", 'click', function(){
       var streamElement = $(this),
           commentPane = streamElement.find('.comment_pane');
-      $('.comment_pane').addClass('hidden');
-      commentPane.removeClass('hidden');
+    });
 
-      var objDiv = commentPane.find('ul.comments');
-      objDiv.scrollTop(objDiv.attr('scrollHeight'));
 
-      $('.stream_element').removeClass('selected');
-      streamElement.addClass('selected');
+
+
+
+    $(window).scroll(function(){
+      var windowTop = $(window).scrollTop();
+          activeElement = $('.stream_element#active_element').first();
+
+
+      var inRange = function(element, windowTop){
+        var elementFromTop = element.offset().top -100,
+            elementHeight = element.height(),
+            elementFromBottom = elementFromTop + elementHeight;
+        return(elementFromTop < windowTop && elementFromBottom > windowTop);
+      };
+
+      if(activeElement.length > 0 && inRange(activeElement,windowTop)){
+
+      }else{
+
+        $('.stream_element').removeAttr('id');
+        $('.comment_pane').css('position', 'block');
+
+        $('.stream_element').each(function(){
+
+          var element = $(this),
+              commentPane = element.find('.comment_pane');
+
+
+          if( inRange(element, windowTop) ){
+
+            var fromTop = -(element.offset().top - windowTop - 120);
+
+            commentPane.css('position', 'fixed');
+
+
+            element.attr('id','active_element');
+
+            return false;
+          }
+        });
+      }
     });
 
     // reshare button action

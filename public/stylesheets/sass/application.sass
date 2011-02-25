@@ -119,6 +119,10 @@ form
   ul
     :margin 0
 
+.stream_element#active_element
+  .comment_pane
+    :display block
+
 header
   :z-index 2
   :display none
@@ -646,11 +650,8 @@ ul.show_comments
 
   .comment_pane
     :z-index 7
-    :background
-      :color rgba(10,10,10,0.8)
-    :padding 10px
     :position absolute
-    :top 0px
+    :top 100px
     :left 460px
     :-webkit-border-radius 3px
     :width 336px
@@ -668,6 +669,10 @@ ul.show_comments
       textarea
         :margin
           :bottom 2px
+
+    :max-height 400px
+    :overflow-y auto
+    :overflow-x none
 
 .profile_photo
   img
@@ -739,7 +744,12 @@ a.paginate, #infscr-loading
     .controls
       :display inline
 
+  p > a
+    :color desaturate($blue,20%)
+
 .stream_element:hover
+  p > a
+    :color $blue
   .right
     :display inline
 
@@ -2556,3 +2566,4 @@ ul.show_comments
 
   *
     :color #fff
+

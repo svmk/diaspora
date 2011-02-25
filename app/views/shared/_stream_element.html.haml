@@ -32,6 +32,4 @@
 
     .comment_pane.hidden
       = image_tag 'tick.png', :class => 'tick'
-      %h3
-        = "#{post.comments.size} replies"
       = render "comments/comments", :post_id => post.id, :comments => post.comments, :current_user => current_user, :condensed => true, :commenting_disabled => defined?(@commenting_disabled)
