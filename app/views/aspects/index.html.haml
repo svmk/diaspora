@@ -12,7 +12,7 @@
 /  = render "shared/invitations", :invites => @invites
 
 
-.span-12
+.span-13
   = render 'aspects/no_contacts_message', :aspect => @aspect, :contact_count => @contacts.count
 
   #aspect_stream_container
@@ -22,12 +22,3 @@
       :posts => @posts,
       :fakes => @fakes
 
-
-.fixed_side
-  .stream_element
-    %br
-
-    %ul.comments
-      = render :partial => 'comments/comment', :collection => Post.last.comments
-      %li.comment.show
-        = new_comment_form(Post.last.id, current_user)

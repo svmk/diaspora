@@ -5,20 +5,25 @@
 - content_for :page_title do
   = @person.name
 
-.span-4.append-1.last
-  = render :partial => 'people/profile_sidebar', :locals => {:person => @person, :contact => @contact }
 
-  - if @contact.persisted? && @contacts_of_contact.count > 0
-    .span-8.last
-      %hr{:style=>"width:150px;"}
-      .section.contact_pictures
-        %h4
-          = @contacts_of_contact.length
-          = t('.similar_contacts')
-        - for person in @contacts_of_contact
-          = person_image_link person
+.span-12
+  #aspect_stream_container
+    - if @posts.count > 0
+      -if @post_type == :photos
+        = render 'photos/index', :photos => @posts
+      - else
+        #main_stream.stream
+          = render 'shared/stream', :posts => @fakes, :commenting_disabled => @commenting_disabled
+          %a.paginate
+            = t("more")
+      = will_paginate @posts
 
-.span-14.last
+    - else
+      #stream
+        %li{:style=>"text-align:center;"}
+          .dull= t('.no_posts')
+
+.right_pane
   #author_info
     - unless @contact.persisted? || current_user.person == @person
       .right
@@ -53,18 +58,14 @@
         = @person.diaspora_handle
   %hr
 
-  - if @posts.count > 0
-    -if @post_type == :photos
-      = render 'photos/index', :photos => @posts
-    - else
-      #main_stream.stream
-        = render 'shared/stream', :posts => @fakes, :commenting_disabled => @commenting_disabled
-        %a.paginate
-          = t("more")
-    = will_paginate @posts
+  = render :partial => 'people/profile_sidebar', :locals => {:person => @person, :contact => @contact }
 
-  - else
-    #stream
-      %li{:style=>"text-align:center;"}
-        .dull= t('.no_posts')
-
+  - if @contact.persisted? && @contacts_of_contact.count > 0
+    .span-8.last
+      %hr{:style=>"width:150px;"}
+      .section.contact_pictures
+        %h4
+          = @contacts_of_contact.length
+          = t('.similar_contacts')
+        - for person in @contacts_of_contact
+          = person_image_link person

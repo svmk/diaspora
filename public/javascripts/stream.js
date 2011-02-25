@@ -33,6 +33,20 @@ var Stream = {
           .parent().parent()
             .removeClass('open');
       }
+
+    });
+
+    $stream.delegate(".stream_element", 'click', function(){
+      var streamElement = $(this),
+          commentPane = streamElement.find('.comment_pane');
+      $('.comment_pane').addClass('hidden');
+      commentPane.removeClass('hidden');
+
+      var objDiv = commentPane.find('ul.comments');
+      objDiv.scrollTop(objDiv.attr('scrollHeight'));
+
+      $('.stream_element').removeClass('selected');
+      streamElement.addClass('selected');
     });
 
     // reshare button action
