@@ -3,12 +3,9 @@
 #   the COPYRIGHT file.
 
 # This file is used by Rack-based servers to start the application.
-
+require `gem which memprof/signal`.chomp
 require ::File.expand_path('../config/environment',  __FILE__)
 require ::File.expand_path('../lib/chrome_frame', __FILE__)
-
-require 'memprof/tracer'
-use Memprof::Tracer
 
 use Rack::ChromeFrame, :minimum => 8
 run Diaspora::Application
