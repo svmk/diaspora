@@ -8,11 +8,9 @@
   });
 
 #publisher
-
   #click_to_share
     = image_tag 'icons/doc_edit.png'
     %span= t('.whats_on_your_mind')
-
     - if @aspect_ids.length == 1
       = "(#{@aspect_ids.length} #{t('_aspect').downcase})"
     - else
