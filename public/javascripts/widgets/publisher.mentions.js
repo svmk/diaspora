@@ -3,60 +3,24 @@
  *   the COPYRIGHT file.
  */
 
-//TODO: make this a widget
-var Publisher = {
-  close: function() {
-    this.form.addClass("closed");
-    this.input.css('min-height', '');
-  },
-  open: function() {
-    this.form.removeClass("closed");
-    this.input.css('min-height', '42px');
-    Publisher.determineSubmitAvailability();
-  },
+(function() {
+  var Mentions = function() {
+    this.start = function() {
+      console.log(this._superclass);
 
+    };
+
+  };
+
+  Diaspora.widgets.add("publisher.mentions", Mentions);
+
+  /*
+}
+  //TODO: make this a widget
+var Publisher = {
   clear: function() {
     this.autocompletion.mentionList.clear();
-    $("#photodropzone").find('li').remove();
-    this.removeClass("with_attachments").css('paddingBottom', '');
-  },
 
-  determineSubmitAvailability: function() {
-    var onlyWhitespaces = (this.input.val().trim() == ''),
-      isSubmitDisabled = this.submit.attr("disabled");
-
-    if(onlyWhitespaces && !isSubmitDisabled) {
-      this.submit.attr("disabled", true);
-    }
-    else if(!onlyWhitespaces && isSubmitDisabled) {
-      this.submit.removeAttr("disabled");
-    }
-  },
-
-  bindServiceIcons: function(){
-    $(".service_icon").bind("click", function(evt){
-      $(this).toggleClass("dim");
-      Publisher.toggleServiceField($(this).attr('id'));
-    });
-  },
-
-  bindPublicIcon: function(){
-    $(".public_icon").bind("click", function(evt){
-      $(this).toggleClass("dim");
-      var public_field= $("#publisher #status_message_public");
-
-      (public_field.val() == 'false')?(public_field.val('true')):(public_field.val('false'));
-    });
-  },
-
-  toggleServiceField: function(service){
-    var hidden_field = $('#publisher [name="services[]"][value="'+service+'"]')
-    if(hidden_field.length > 0){
-      hidden_field.remove();
-    } else {
-      $("#publisher .content_creation form").append(
-      '<input id="services_" name="services[]" type="hidden" value="'+service+'">');
-    }
   },
 
   autocompletion: {
@@ -275,30 +239,6 @@ var Publisher = {
     }
   },
 
+*/
 
-  initialize: function() {
-    this.form = $("#publisher");
-    this.input = $("#status_message_fake_message");
-    this.hiddenInput = $("#status_message_message");
-    this.submit = $("#status_message_submit");
-
-    this.bindServiceIcons();
-    this.bindPublicIcon();
-
-    if (this.input.val() == "") {
-      Publisher.close();
-    }
-
-    Publisher.autocompletion.initialize();
-    Publisher.hiddenInput.val(this.input.val());
-    Publisher.input.keydown(this.autocompletion.keyDownHandler);
-    Publisher.input.keyup(this.autocompletion.keyUpHandler);
-    Publisher.input.focus(function() {
-      Publisher.open();
-    });
-  }
-};
-
-$(document).ready(function() {
-  Publisher.initialize();
-});
+})();

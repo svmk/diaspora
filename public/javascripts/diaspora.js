@@ -18,8 +18,6 @@ Diaspora.WidgetCollection.prototype.add = function(widgetId, widget) {
     widget.prototype._superclass = this.collection[_namespaces.join(".")];
   }
 
-
-
   this[widgetId] = this.collection[widgetId] = new widget();
   if(this.ready) {
     this.collection[widgetId].start();
