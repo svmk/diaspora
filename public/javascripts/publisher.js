@@ -5,55 +5,62 @@
 
 //TODO: make this a widget
 var Publisher = {
-  close: function(){
-    Publisher.form().addClass('closed');
-    Publisher.form().find("textarea.ac_input").css('min-height', '');
+  close: function() {
+    this.form.addClass("closed");
+    this.input.css('min-height', '');
   },
-  open: function(){
-    Publisher.form().removeClass('closed');
-    Publisher.form().find("textarea.ac_input").css('min-height', '42px');
+  open: function() {
+    this.form.removeClass("closed");
+    this.input.css('min-height', '42px');
     Publisher.determineSubmitAvailability();
   },
-  cachedForm : false,
-  form: function(){
-    if(!Publisher.cachedForm){
-      Publisher.cachedForm = $('#publisher');
-    }
-    return Publisher.cachedForm;
-  },
-  cachedInput : false,
-  input: function(){
-    if(!Publisher.cachedInput){
-      Publisher.cachedInput = Publisher.form().find('#status_message_fake_message');
-    }
-    return Publisher.cachedInput;
-  },
-  cachedSubmit : false,
-  submit: function(){
-    if(!Publisher.cachedSubmit){
-      Publisher.cachedSubmit = Publisher.form().find('#status_message_submit');
-    }
-    return Publisher.cachedSubmit;
+
+  clear: function() {
+    this.autocompletion.mentionList.clear();
+    $("#photodropzone").find('li').remove();
+    this.removeClass("with_attachments").css('paddingBottom', '');
   },
 
-  cachedHiddenInput : false,
-  hiddenInput: function(){
-    if(!Publisher.cachedHiddenInput){
-      Publisher.cachedHiddenInput = Publisher.form().find('#status_message_message');
+  determineSubmitAvailability: function() {
+    var onlyWhitespaces = (this.input.val().trim() == ''),
+      isSubmitDisabled = this.submit.attr("disabled");
+
+    if(onlyWhitespaces && !isSubmitDisabled) {
+      this.submit.attr("disabled", true);
     }
-    return Publisher.cachedHiddenInput;
+    else if(!onlyWhitespaces && isSubmitDisabled) {
+      this.submit.removeAttr("disabled");
+    }
   },
 
-  cachedSubmit : false,
-  submit: function(){
-    if(!Publisher.cachedSubmit){
-      Publisher.cachedSubmit = Publisher.form().find('#status_message_submit');
+  bindServiceIcons: function(){
+    $(".service_icon").bind("click", function(evt){
+      $(this).toggleClass("dim");
+      Publisher.toggleServiceField($(this).attr('id'));
+    });
+  },
+
+  bindPublicIcon: function(){
+    $(".public_icon").bind("click", function(evt){
+      $(this).toggleClass("dim");
+      var public_field= $("#publisher #status_message_public");
+
+      (public_field.val() == 'false')?(public_field.val('true')):(public_field.val('false'));
+    });
+  },
+
+  toggleServiceField: function(service){
+    var hidden_field = $('#publisher [name="services[]"][value="'+service+'"]')
+    if(hidden_field.length > 0){
+      hidden_field.remove();
+    } else {
+      $("#publisher .content_creation form").append(
+      '<input id="services_" name="services[]" type="hidden" value="'+service+'">');
     }
-    return Publisher.cachedSubmit;
   },
 
   autocompletion: {
-    options : function(){return {
+    options : function() {return {
       minChars : 1,
       max : 5,
       onSelect : Publisher.autocompletion.onSelect,
@@ -86,7 +93,7 @@ var Publisher = {
                     };
       Publisher.autocompletion.mentionList.push(mention);
       Publisher.oldInputContent = visibleInput.val();
-      Publisher.hiddenInput().val(Publisher.autocompletion.mentionList.generateHiddenInput(visibleInput.val()));
+      Publisher.hiddenInput.val(Publisher.autocompletion.mentionList.generateHiddenInput(visibleInput.val()));
     },
 
     mentionList : {
@@ -108,10 +115,10 @@ var Publisher = {
       generateHiddenInput : function(visibleString){
         var resultString = visibleString;
         for(i in this.sortedMentions()){
-          var mention = this.mentions[i];
-          var start = resultString.slice(0, mention.visibleStart);
-          var insertion = mention.mentionString;
-          var end = resultString.slice(mention.visibleEnd);
+          var mention = this.mentions[i],
+            start = resultString.slice(0, mention.visibleStart),
+            insertion = mention.mentionString,
+            end = resultString.slice(mention.visibleEnd);
 
           resultString = start + insertion + end;
         }
@@ -192,9 +199,9 @@ var Publisher = {
       },
     },
     repopulateHiddenInput: function(){
-      var newHiddenVal = Publisher.autocompletion.mentionList.generateHiddenInput(Publisher.input().val());
-      if(newHiddenVal != Publisher.hiddenInput().val()){
-        Publisher.hiddenInput().val(newHiddenVal);
+      var newHiddenVal = Publisher.autocompletion.mentionList.generateHiddenInput(Publisher.input.val());
+      if(newHiddenVal != Publisher.hiddenInput.val()){
+        Publisher.hiddenInput.val(newHiddenVal);
       }
     },
 
@@ -204,11 +211,11 @@ var Publisher = {
     },
 
     keyDownHandler : function(event){
-      var input = Publisher.input();
-      var selectionStart = input[0].selectionStart;
-      var selectionEnd = input[0].selectionEnd;
-      var isDeletion = (event.keyCode == KEYCODES.DEL && selectionStart < input.val().length) || (event.keyCode == KEYCODES.BACKSPACE && (selectionStart > 0 || selectionStart != selectionEnd))
-      var isInsertion = (KEYCODES.isInsertion(event.keyCode) && event.keyCode != KEYCODES.RETURN )
+      var input = Publisher.input,
+        selectionStart = input[0].selectionStart,
+        selectionEnd = input[0].selectionEnd,
+        isDeletion = (event.keyCode == KEYCODES.DEL && selectionStart < input.val().length) || (event.keyCode == KEYCODES.BACKSPACE && (selectionStart > 0 || selectionStart != selectionEnd)),
+        isInsertion = (KEYCODES.isInsertion(event.keyCode) && event.keyCode != KEYCODES.RETURN);
 
       if(isDeletion){
         Publisher.autocompletion.mentionList.deletionAt(selectionStart, selectionEnd, event.keyCode);
@@ -218,12 +225,10 @@ var Publisher = {
     },
 
     addMentionToInput: function(input, cursorIndex, formatted){
-      var inputContent = input.val();
-
-      var stringLoc = Publisher.autocompletion.findStringToReplace(inputContent, cursorIndex);
-
-      var stringStart = inputContent.slice(0, stringLoc[0]);
-      var stringEnd = inputContent.slice(stringLoc[1]);
+      var inputContent = input.val(),
+        stringLoc = Publisher.autocompletion.findStringToReplace(inputContent, cursorIndex),
+        stringStart = inputContent.slice(0, stringLoc[0]),
+        stringEnd = inputContent.slice(stringLoc[1]);
 
       input.val(stringStart + formatted + stringEnd);
       var offset = formatted.length - (stringLoc[1] - stringLoc[0])
@@ -259,71 +264,36 @@ var Publisher = {
         return '';
       }
     },
-    contactsJSON: function(){
+    contactsJSON: function() {
       return $.parseJSON($('#contact_json').val());
     },
-    initialize: function(){
-      Publisher.input().autocomplete(Publisher.autocompletion.contactsJSON(),
+    initialize: function() {
+      Publisher.input.autocomplete(Publisher.autocompletion.contactsJSON(),
         Publisher.autocompletion.options());
-      Publisher.input().result(Publisher.autocompletion.selectItemCallback);
-      Publisher.oldInputContent = Publisher.input().val();
+      Publisher.input.result(Publisher.autocompletion.selectItemCallback);
+      Publisher.oldInputContent = Publisher.input.val();
     }
   },
-  determineSubmitAvailability: function(){
-    var onlyWhitespaces = (Publisher.input().val().trim() == '');
-    var isSubmitDisabled = Publisher.submit().attr('disabled');
-    if (onlyWhitespaces && !isSubmitDisabled) {
-      Publisher.submit().attr('disabled', true);
-    } else if (!onlyWhitespaces && isSubmitDisabled) {
-      Publisher.submit().removeAttr('disabled');
-    }
-  },
-  clear: function(){
-    this.autocompletion.mentionList.clear();
-    $("#photodropzone").find('li').remove();
-    $("#publisher textarea").removeClass("with_attachments").css('paddingBottom', '');
-  },
-  bindServiceIcons: function(){
-    $(".service_icon").bind("click", function(evt){
-      $(this).toggleClass("dim");
-      Publisher.toggleServiceField($(this).attr('id'));
-    });
-  },
-  bindPublicIcon: function(){
-    $(".public_icon").bind("click", function(evt){
-      $(this).toggleClass("dim");
-      var public_field= $("#publisher #status_message_public");
 
-      (public_field.val() == 'false')?(public_field.val('true')):(public_field.val('false'));
-    });
-  },
-  toggleServiceField: function(service){
-    var hidden_field = $('#publisher [name="services[]"][value="'+service+'"]')
-    if(hidden_field.length > 0){
-      hidden_field.remove();
-    } else {
-      $("#publisher .content_creation form").append(
-      '<input id="services_" name="services[]" type="hidden" value="'+service+'">');
-    };
-  },
+
   initialize: function() {
-    Publisher.cachedForm = false;
-    Publisher.cachedInput = false;
-    Publisher.cachedHiddenInput = false;
-    Publisher.cachedSubmit = false;
+    this.form = $("#publisher");
+    this.input = $("#status_message_fake_message");
+    this.hiddenInput = $("#status_message_message");
+    this.submit = $("#status_message_submit");
 
-    Publisher.bindServiceIcons();
-    Publisher.bindPublicIcon();
+    this.bindServiceIcons();
+    this.bindPublicIcon();
 
-    if ($("#status_message_fake_message").val() == "") {
+    if (this.input.val() == "") {
       Publisher.close();
-    };
+    }
 
     Publisher.autocompletion.initialize();
-    Publisher.hiddenInput().val(Publisher.input().val());
-    Publisher.input().keydown(Publisher.autocompletion.keyDownHandler);
-    Publisher.input().keyup(Publisher.autocompletion.keyUpHandler);
-    Publisher.form().find("textarea").bind("focus", function(evt) {
+    Publisher.hiddenInput.val(this.input.val());
+    Publisher.input.keydown(this.autocompletion.keyDownHandler);
+    Publisher.input.keyup(this.autocompletion.keyUpHandler);
+    Publisher.input.focus(function() {
       Publisher.open();
     });
   }
