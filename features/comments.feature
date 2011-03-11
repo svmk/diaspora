@@ -16,7 +16,7 @@ Feature: commenting
     And I press "Share"
     And I follow "Home"
    Then I should see "Look at this dog" within ".stream_element"
-   Then I should see a "img" within ".stream_element div.photo_attachments"
+   Then I should see a "img" within ".stream_element span.photo_attachments"
     And I log out
 
   Scenario: comment on a post from within a user's stream
