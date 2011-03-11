@@ -2,7 +2,9 @@
 -#   licensed under the Affero General Public License version 3 or later.  See
 -#   the COPYRIGHT file.
 
-= hidden_field_tag :contact_json, @selected_contacts.map{|contact| contact.person}.to_json
+- content_for :head do
+  :javascript
+    Diaspora.widgets["publisher.mentions"].loadContacts(#{@selected_contacts.map{|contact| contact.person}.to_json});
 
 %h4
   .right

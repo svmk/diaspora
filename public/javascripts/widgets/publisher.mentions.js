@@ -6,41 +6,47 @@
 (function() {
   var Mentions = function() {
     this.start = function() {
-      console.log(this._superclass);
-
+      this._superclass.input.autocomplete(this.contacts, this.options);
+      this.oldInputContent = this._superclass.input.val();
+      
     };
 
+    this.loadContacts = function(contacts) {
+      this.contacts = contacts;
+    };
   };
 
+  Mentions.prototype.options = {
+    inChars : 1,
+    max : 5,
+    onSelect : Mentions.onSelect,
+    searchTermFromValue: Mentions.searchTermFromValue,
+    scroll : false,
+    formatItem: function(row) {
+      return "<img src='"+ row.avatar +"' class='avatar'/>" + row.name;
+    },
+    formatMatch: function(row) {
+        return row.name;
+    },
+    formatResult: function(row) {
+        return row.name;
+    },
+    disableRightAndLeft : true
+  };
+
+  Mentions.prototype.onSelect = function(visibleInput, data, formatted) {
+    var visibleCursor
+  };
+
+  Mentions.prototype.mentionList =
+
+
+
+
+  
   Diaspora.widgets.add("publisher.mentions", Mentions);
+})();
 
-  /*
-}
-  //TODO: make this a widget
-var Publisher = {
-  clear: function() {
-    this.autocompletion.mentionList.clear();
-
-  },
-
-  autocompletion: {
-    options : function() {return {
-      minChars : 1,
-      max : 5,
-      onSelect : Publisher.autocompletion.onSelect,
-      searchTermFromValue: Publisher.autocompletion.searchTermFromValue,
-      scroll : false,
-      formatItem: function(row, i, max) {
-          return "<img src='"+ row.avatar +"' class='avatar'/>" + row.name;
-      },
-      formatMatch: function(row, i, max) {
-          return row.name;
-      },
-      formatResult: function(row) {
-          return row.name;
-      },
-      disableRightAndLeft : true
-    };},
     hiddenMentionFromPerson : function(personData){
       return "@{" + personData.name + "; " + personData.handle + "}";
     },
@@ -228,17 +234,8 @@ var Publisher = {
         return '';
       }
     },
-    contactsJSON: function() {
-      return $.parseJSON($('#contact_json').val());
-    },
-    initialize: function() {
-      Publisher.input.autocomplete(Publisher.autocompletion.contactsJSON(),
-        Publisher.autocompletion.options());
-      Publisher.input.result(Publisher.autocompletion.selectItemCallback);
-      Publisher.oldInputContent = Publisher.input.val();
-    }
   },
 
-*/
+
 
 })();
