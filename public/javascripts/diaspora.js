@@ -11,11 +11,20 @@ Diaspora.WidgetCollection = function() {
 };
 
 Diaspora.WidgetCollection.prototype.add = function(widgetId, widget) {
-    this[widgetId] = this.collection[widgetId] = new widget();
-    if(this.ready) {
-      this.collection[widgetId].start();
-    }
-  };
+  var _namespaces = widgetId.split(".");
+
+  if(_namespaces.length) {
+    _namespaces.pop();
+    widget.prototype._superclass = this.collection[_namespaces.join(".")];
+  }
+
+
+
+  this[widgetId] = this.collection[widgetId] = new widget();
+  if(this.ready) {
+    this.collection[widgetId].start();
+  }
+};
 
 Diaspora.WidgetCollection.prototype.remove = function(widgetId) {
     delete this.collection[widgetId];
@@ -26,10 +35,11 @@ Diaspora.WidgetCollection.prototype.init = function() {
   for(var widgetId in this.collection) {
     this.collection[widgetId].start();
   }
-}
+};
 
 Diaspora.widgets = Diaspora.widgets || new Diaspora.WidgetCollection();
 
 $(document).ready(function() {
   Diaspora.widgets.init();
 });
+

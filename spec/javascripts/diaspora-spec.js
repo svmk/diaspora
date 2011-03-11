@@ -7,7 +7,7 @@ describe("Diaspora", function() {
   describe("widgetCollection", function() {
     describe("prototype", function() {
       beforeEach(function() {
-        window.widgets = new Diaspora.widgetCollection();
+        window.widgets = new Diaspora.WidgetCollection();
       });
 
       describe("add", function() {
@@ -22,6 +22,20 @@ describe("Diaspora", function() {
           window.widgets.add("sup", function() { });
           expect(window.widgets.sup).toEqual(window.widgets.collection.sup);
         });
+
+        it("allows basic heirarchical relationships", function() {
+          window.widgets.add("foo", function() {
+            this.start = $.noop;
+          });
+
+          window.widgets.add("foo.bar", function() {
+            this.start = $.noop;
+          });
+
+          expect(window.widgets["foo.bar"]._superclass).toEqual(window.widgets.foo);
+        });
+
+
       });
 
       describe("remove", function() {
