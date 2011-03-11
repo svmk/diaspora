@@ -5,30 +5,30 @@
 
 var Diaspora = Diaspora || {};
 
-Diaspora.widgetCollection = function() {
+Diaspora.WidgetCollection = function() {
   this.ready = false;
   this.collection = {};
 };
 
-Diaspora.widgetCollection.prototype.add = function(widgetId, widget) {
+Diaspora.WidgetCollection.prototype.add = function(widgetId, widget) {
     this[widgetId] = this.collection[widgetId] = new widget();
     if(this.ready) {
       this.collection[widgetId].start();
     }
   };
 
-Diaspora.widgetCollection.prototype.remove = function(widgetId) {
+Diaspora.WidgetCollection.prototype.remove = function(widgetId) {
     delete this.collection[widgetId];
 };
 
-Diaspora.widgetCollection.prototype.init = function() {
+Diaspora.WidgetCollection.prototype.init = function() {
   this.ready = true;
   for(var widgetId in this.collection) {
     this.collection[widgetId].start();
   }
 }
 
-Diaspora.widgets = Diaspora.widgets || new Diaspora.widgetCollection();
+Diaspora.widgets = Diaspora.widgets || new Diaspora.WidgetCollection();
 
 $(document).ready(function() {
   Diaspora.widgets.init();
