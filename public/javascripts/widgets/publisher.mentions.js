@@ -38,7 +38,11 @@
     var visibleCursor
   };
 
-  Mentions.prototype.mentionList =
+  Mentions.prototype.mentionList = {
+    mentions: [],
+    
+
+  };
 
 
 
