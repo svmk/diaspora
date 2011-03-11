@@ -5,7 +5,7 @@
 (function() {
   var Publisher = function() {
     this.start = function() {
-      this.form = $("#publisher");
+      this.form = $("#publisher form");
       this.input = $("#status_message_fake_message");
       this.hiddenInput = $("#status_message_message");
       this.submit = $("#status_message_submit");
@@ -48,7 +48,7 @@
   };
 
   Publisher.prototype.canSubmit = function() {
-    var blank = (this.input.val.trim() === ""),
+    var blank = (this.input.val().trim() === ""),
       isSubmitDisabled = this.submit.attr("disabled");
     if(blank && !isSubmitDisabled) {
       this.submit.attr("disabled", true);

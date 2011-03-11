@@ -21,6 +21,7 @@ javascripts:
     - public/javascripts/vendor/timeago.js
     - public/javascripts/vendor/Mustache.js
     - public/javascripts/jquery.autocomplete-custom.js
+    - public/javascripts/vendor/jquery.autoSuggest.js
     - public/javascripts/fileuploader-custom.js
     - public/javascripts/keycodes.js
     - public/javascripts/diaspora.js
