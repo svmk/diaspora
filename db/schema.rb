@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110314043119) do
+ActiveRecord::Schema.define(:version => 20110318000734) do
 
   create_table "aspect_memberships", :force => true do |t|
     t.integer  "aspect_id",  :null => false
@@ -256,6 +256,17 @@ ActiveRecord::Schema.define(:version => 20110314043119) do
   add_index "requests", ["recipient_id"], :name => "index_requests_on_recipient_id"
   add_index "requests", ["sender_id", "recipient_id"], :name => "index_requests_on_sender_id_and_recipient_id", :unique => true
   add_index "requests", ["sender_id"], :name => "index_requests_on_sender_id"
+
+  create_table "service_users", :force => true do |t|
+    t.string   "uid"
+    t.string   "name"
+    t.integer  "service_id"
+    t.integer  "person_id"
+    t.integer  "contact_id"
+    t.integer  "request_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "services", :force => true do |t|
     t.string   "type",          :null => false
