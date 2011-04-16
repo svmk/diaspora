@@ -158,6 +158,17 @@ module ApplicationHelper
     end
   end
 
+  def person_image_link_with_class(person, opts = {},class_name = '')
+    return "" if person.nil? || person.profile.nil?
+    if opts[:to] == :photos
+      link_to person_image_tag(person, opts[:size]), person_photos_path(person)
+    else
+      "<a href='/people/#{person.id}' class='#{class_name}'>
+  #{person_image_tag(person)}
+</a>".html_safe
+    end
+  end
+
   def post_yield_tag(post)
     (':' + post.id.to_s).to_sym
   end

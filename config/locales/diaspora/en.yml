@@ -188,6 +188,7 @@ en:
     show:
       reply: "reply"
       delete: "delete and block conversation"
+      add_contact: "Add contact"
     new:
       to: "to"
       subject: "subject"

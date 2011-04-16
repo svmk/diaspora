@@ -1,8 +1,52 @@
 -#   Copyright (c) 2010, Diaspora Inc.  This file is
 -#   licensed under the Affero General Public License version 3 or later.  See
 -#   the COPYRIGHT file.
-
-
+:javascript
+  function add_contact_hide_keyup(ev)
+  {
+    if (ev.keyCode == 27){ // Escape key
+        $('#add_avatar_container').animate({ opacity: "hide" },200);
+        $(document).unbind('click');
+        $(document).unbind('keyup');
+    }
+    if (ev.keyCode == 13){ // Enter key
+        $('.contact_list_new ul li:not(.hiding):first .right.add_delete_button span a:not(.hiding)').click()
+    }
+  }
+  function add_contact_hide(ev)
+    {
+      el = $('#add_avatar_container');
+      pos = $('#add_avatar_container').offset();
+      shadow_size = 12;
+      if (!(ev.pageX >= pos.left &&
+        ev.pageX <= (pos.left + el[0].clientWidth) &&
+        ev.pageY >= (pos.top - shadow_size) &&
+        ev.pageY <= (pos.top + el[0].clientHeight + shadow_size)))
+      {
+        $('#add_avatar_container').animate({ opacity: "hide" },200);
+        $(document).unbind('click');
+        $(document).unbind('keyup');
+      }
+    }
+  $(document).ready(function(){
+    $('a#add_avatar img').click(function(){
+        $('#add_avatar_container').load('#{@url_new_contact}',function(){
+        pos = $('a#add_avatar').position();
+        width = 330;
+        height = 350;
+        this.style.width = width + 'px';
+        this.style.position = 'absolute';
+        this.style.left = (pos.left - width + 25) + 'px';
+        this.style.top = (pos.top + 34) + 'px';
+        this.style.opacity = 0;
+        this.style.display = 'block';
+        $(this).animate({opacity: 1},150);
+        $(document).bind('click',add_contact_hide);
+        $(document).bind('keyup',add_contact_hide_keyup);
+        $('#contact_search').focus();
+        });
+    });
+  });
 .span-16.last
   .conversation_participants
     .span-9
@@ -14,8 +58,16 @@
         = link_to (image_tag('deletelabel.png') + ' ' + t('.delete').downcase), conversation_conversation_visibility_path(conversation), :method => 'delete', :confirm => t('are_you_sure')
 
     .span-6.avatars.last
-      - for participant in conversation.participants
-        = person_image_link(participant)
+      - if owner then
+        %div#add_avatar_container
+        %a.no_highlight#add_avatar
+          %img{:alt=>t('.add_contact'),:src=>'/images/user/add_contact.png',:title=>t('.add_contact')}
+      - for participant in @conversation_vis
+        - class_name = 'no_highlight'
+        - if participant.owner then class_name = 'owner_highlight'
+        - if participant.editor then class_name = 'editor_highlight'
+        - if participant.deleted then class_name = class_name + ' avatar_hiding'
+        = person_image_link_with_class(participant.person,{},class_name)
 
 %br
 %br

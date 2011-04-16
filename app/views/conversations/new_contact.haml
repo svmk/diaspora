@@ -1,0 +1,177 @@
+-#   Copyright (c) 2010, Diaspora Inc.  This file is
+-#   licensed under the Affero General Public License version 3 or later.  See
+-#   the COPYRIGHT file.
+-#
+:javascript
+  $(document).ready(function(){
+    $('#contact_search').change(function(){
+      $('.contact_list_new ul li').each(function(indx,val){
+        text_serach = $('#contact_search')[0].value.replace(' ','').toLowerCase();
+        content = $(val).find('h4.name a')[0].textContent.replace(' ','').toLowerCase();
+        if ((content.search(text_serach) >= 0))
+        {
+            $(val).removeClass('hiding');
+        }
+        else
+        {
+            $(val).addClass('hiding');
+        }
+      });
+    });
+  });
+  function change_contact(people_id,url_path,people_url,it,class_name)
+    {
+        g = $.ajax({url:url_path,async:false,cache:false});
+        if (g.status == 200)
+        {
+            if (g.responseText.indexOf('O') != -1)
+            {
+              $(it).parent().parent().parent().find('.right.owner_button span a').addClass('hiding');
+              $(it).parent().parent().parent().find('.right.owner_button span a.remove_owner').removeClass('hiding');
+            }
+            else
+            {
+              $(it).parent().parent().parent().find('.right.owner_button span a').addClass('hiding');
+              $(it).parent().parent().parent().find('.right.owner_button span a.add_owner').removeClass('hiding');
+            }
+
+            if (g.responseText.indexOf('E') != -1)
+            {
+              $(it).parent().parent().parent().find('.right.edit_button span a').addClass('hiding');
+              $(it).parent().parent().parent().find('.right.edit_button span a.remove_editor').removeClass('hiding');
+            }
+            else
+            {
+              $(it).parent().parent().parent().find('.right.edit_button span a').addClass('hiding');
+              $(it).parent().parent().parent().find('.right.edit_button span a.add_editor').removeClass('hiding');
+            }
+
+            if (g.responseText.indexOf('R') != -1)
+            {
+               al_have = false;
+                $('div.span-6.avatars.last a').each(function(indx,itm){
+                    if ($(itm).find('img').data('person_id') == people_id)
+                    {
+                        al_have = true;
+                        if ($(itm).hasClass('avatar_hiding'))
+                        {
+                            $(itm).animate({opacity:1.0},500);
+                            $(itm).removeClass('avatar_hiding');
+                        }
+                    }
+                });
+                if (!al_have)
+                {
+                    $('div.span-6.avatars.last').append(g.responseText);
+                }
+              $(it).parent().parent().parent().find('.right.add_delete_button span a').addClass('hiding');
+              $(it).parent().parent().parent().find('.right.add_delete_button span a.remove').removeClass('hiding');
+            }
+            else
+            {
+              $(it).parent().parent().parent().find('.right.add_delete_button span a').addClass('hiding');
+              $(it).parent().parent().parent().find('.right.add_delete_button span a.add').removeClass('hiding');
+               $('div.span-6.avatars.last a').each(function(indx,itm){
+                    if ($(itm).find('img').data('person_id') == people_id)
+                    {
+                        $(itm).animate({opacity:0.5},500);
+                        $(itm).addClass('avatar_hiding');
+                    }
+                });
+            }
+            if (class_name == 'remove_owner')
+            {
+                $(it).parent().parent().parent().find('.right.edit_button span a').addClass('hiding');
+                $(it).parent().parent().parent().find('.right.edit_button span a.remove_editor').removeClass('hiding');
+                $(it).parent().parent().parent().find('.right.add_delete_button span a').addClass('hiding');
+                $(it).parent().parent().parent().find('.right.add_delete_button span a.remove').removeClass('hiding');
+            }
+            if (class_name == 'remove_editor')
+            {                
+                $(it).parent().parent().parent().find('.right.add_delete_button span a').addClass('hiding');
+                $(it).parent().parent().parent().find('.right.add_delete_button span a.remove').removeClass('hiding');
+            }
+            $('div.span-6.avatars.last a').each(function(indx,itm){
+              if ($(itm).find('img').data('person_id') == people_id)
+              {
+                $(itm).removeClass('no_highlight');
+                $(itm).removeClass('editor_highlight');
+                $(itm).removeClass('owner_highlight');
+                if (g.responseText.indexOf('O')!=-1)
+                {
+                    $(itm).addClass('owner_highlight');
+                }
+                else
+                {
+                    if (g.responseText.indexOf('E')!=-1)
+                    {
+                        $(itm).addClass('editor_highlight');
+                    }
+                    else
+                    {
+                        if (g.responseText.indexOf('R')!=-1)
+                        {
+                            $(itm).addClass('no_highlight');
+                        }
+                    }
+                }
+              }
+            });
+        };
+    }
+.contact_list_new
+  = search_field_tag :contact_search, "", :class => 'contact_list_search', :results => 5, :placeholder => t('shared.contact_list.all_contacts')
+  %ul
+    - active_records = @active_contacts.map{|rec| rec.person.id}
+    - for contact in @active_contacts
+      %li{:data=>{:contact_id=>contact.person_id}}
+        = person_image_tag contact.person
+        %h4.name
+          = link_to contact.person.name, contact.person
+          .description
+            = contact.person.diaspora_handle
+        .right.owner_button
+          %span
+            %a{:title=>t('.add_owner'),:class => 'button add_owner' + ((not contact.owner) ? '': ' hiding'),:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'afford_to_own',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"remove_owner");'}
+              = image_tag('icons/monotone_plus_add_round.png')
+            %a{:title=>t('.remove_owner'),:class => 'button remove_owner' + (contact.owner ? '': ' hiding'),:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'prohibit_owning',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"add_owner");'}
+              = image_tag('icons/monotone_check_yes.png')
+        .right.edit_button
+          %span
+            %a{:title=>t('.add_editor'),:class => 'button add_editor' + ((not contact.editor) ? '' : ' hiding'),:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'allow_edit',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"remove_editor");'}
+              = image_tag('icons/monotone_plus_add_round.png')
+            %a{:title=>t('.remove_editor'),:class => 'button remove_editor'  + (contact.editor ? '' : ' hiding'),:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'prohibit_edit',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"add_editor");'}
+              = image_tag('icons/monotone_check_yes.png')
+        .right.add_delete_button
+          %span
+            %a{:title=>t('.add_contact'),:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'create_contact',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"remove");',:class => 'button add'  + (contact.deleted ? '' : ' hiding'),:data_id=>contact.person_id.to_s}
+              = image_tag('icons/monotone_plus_add_round.png')
+            %a{:title=>t('.remove_contact'),:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'delete_contact',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"add");',:class => 'button remove' + ((not contact.deleted) ? '' : ' hiding'),:data_id=>contact.person_id.to_s}
+              = image_tag('icons/monotone_check_yes.png')
+    - for contact in @contacts
+      - if not active_records.any?{|rec| rec == contact.person.id} then
+        %li{:data=>{:contact_id=>contact.person_id}}
+          = person_image_tag contact.person
+          %h4.name
+            = link_to contact.person.name, contact.person
+            .description
+              = contact.person.diaspora_handle
+          .right.owner_button
+            %span
+              %a{:title=>t('.add_owner'),:class => 'button add_owner',:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'afford_to_own',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"remove_owner");'}
+                = image_tag('icons/monotone_plus_add_round.png')
+              %a{:title=>t('.remove_owner'),:class => 'button remove_owner hiding',:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'prohibit_owning',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"add_owner");'}
+                = image_tag('icons/monotone_check_yes.png')
+          .right.edit_button
+            %span
+              %a{:title=>t('.add_editor'),:class => 'button add_editor',:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'allow_edit',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"remove_editor");'}
+                = image_tag('icons/monotone_plus_add_round.png')
+              %a{:title=>t('.remove_editor'),:class => 'button remove_editor hiding',:data_id=>contact.person_id.to_s,:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'prohibit_edit',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"add_editor");'}
+                = image_tag('icons/monotone_check_yes.png')
+          .right.add_delete_button
+            %span
+              %a{:title=>t('.add_contact'),:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'create_contact',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"remove");',:class => 'button add',:data_id=>contact.person_id.to_s}
+                = image_tag('icons/monotone_plus_add_round.png')
+              %a{:title=>t('.remove_contact'),:onclick => 'change_contact(' + contact.person_id.to_s + ',"' + url_for(:action => 'delete_contact',:conversation_id => params[:conversation_id],:person_id => contact.person_id) + '","' + url_for(:controller=>'people',:id => contact.person_id) + '",this,"add");',:class => 'button remove hiding',:data_id=>contact.person_id.to_s}
+                = image_tag('icons/monotone_check_yes.png')
+      

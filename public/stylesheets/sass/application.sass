@@ -53,6 +53,15 @@ form
   :width 50px
   :height 50px
 
+#add_avatar_container
+  :border 2px solid rgba(0,0,0,0.3)
+  :-moz-box-shadow 0 0 8px black
+  :-webkit-box-shadow 0 0 8px black
+  :box-shadow 0 0 8px black
+  :border-radius 3px
+  :opacity 0.0
+  :display none
+
 #content
   :background
     :color #fff
@@ -1811,6 +1820,94 @@ ul#request_result
       :bottom 25px
     input.add
       :color green
+.contact_list_new
+  :height 450px
+  :max-height 450px
+
+  :overflow-y hidden
+  :overflow-x hidden
+
+  :border 2px solid #eee
+
+  :background
+    :color rgb(252,252,252)
+
+  .name
+    :position absolute
+    :left 70px
+    :top 10px
+
+  .avatar
+    :position absolute
+    :left 6px
+    :height 50px
+    :width 50px
+
+  :-webkit-box-shadow 0 1px #fff
+  :-moz-box-shadow 0 1px #fff
+  :box-shadow 0 1px #fff
+
+  :-webkit-border-radius 0 0 5px 5px
+  :-moz-border-radius 0 0 5px 5px
+  :border-radius 0 0 5px 5px
+
+  input.contact_list_search
+    :width 97.5%
+    :margin
+      :top 0
+
+  ul
+    :margin-top 1px
+    :margin-left 0px
+    :margin-right 0px
+    :padding 0
+    :overflow-y auto
+    :height 423px
+
+    > li.hiding
+      :display none
+
+    > li
+      :position relative
+      :height 50px
+      :padding 4px
+      :border
+        :bottom 1px solid #eee
+
+      &:last-child
+        :border
+          :bottom none
+
+      &:hover
+        :background
+          :color rgb(245,245,245)
+      .hiding
+        :display none
+      .right
+        :right 8px
+        :top 12px
+      .overflow
+        :overflow-y scroll
+      .owner_button
+        :margin-right 70px
+      .edit_button
+        :margin-right 35px
+      a.button
+        :padding
+          :right 4px
+          :left 4px
+        &.added
+          :background -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(92,199,86)), color-stop(1, rgb(158,255,153)))
+          :background -moz-linear-gradient(top, rgb(158,255,153), rgb(92,199,86))
+
+        &.added.remove
+          :background -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(199,86,86)), color-stop(1, rgb(255,153,153)))
+          :background -moz-linear-gradient(top, rgb(255,153,153), rgb(199,86,86))
+
+          &:active
+            :background -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(130,55,55)), color-stop(1, rgb(199,119,119)))
+            :background -moz-linear-gradient(top, rgb(199,119,119), rgb(130,55,55))
+
 
 .contact_list,
 .aspect_list
@@ -1845,13 +1942,16 @@ ul#request_result
   :border-radius 0 0 5px 5px
 
   input.contact_list_search
-    :width 100%
+    :width 97.5%
     :margin
       :top 0
 
   ul
     :margin 0
     :padding 0
+
+    > li.hiding
+      :display none
 
     > li
       :position relative
@@ -1867,11 +1967,17 @@ ul#request_result
       &:hover
         :background
           :color rgb(245,245,245)
-
+      .hiding
+        :display none
       .right
         :right 8px
         :top 12px
-
+      .overflow
+        :overflow-y scroll
+      .owner_button
+        :margin-right 70px
+      .edit_button
+        :margin-right 35px
       a.button
         :padding
           :right 4px
@@ -2629,7 +2735,6 @@ ul.show_comments
     a
       :margin
         :right 10px
-
     :margin
       :bottom 10px
 
@@ -2646,6 +2751,28 @@ ul.show_comments
       :align right
     :margin
       :top 9px
+
+
+.avatars.last
+  a.owner_highlight
+    img
+      :-moz-box-shadow 0 0 3px #006700
+      :-webkit-box-shadow 0 0 3px #006700
+      :box-shadow 0 0 3px #006700
+  a.editor_highlight
+    img
+      :-moz-box-shadow 0 0 3px #A87DFF
+      :-webkit-box-shadow 0 0 3px #A87DFF
+      :box-shadow 0 0 3px #A87DFF
+  a.no_highlight
+    img
+      :-moz-box-shadow 0 0 3px gray
+      :-webkit-box-shadow 0 0 3px gray
+      :box-shadow 0 0 3px gray
+  a.avatar_hiding
+    img
+      :opacity 0.5
+
 
 .stream_element.new_message
   :border
@@ -2766,6 +2893,16 @@ ul.show_comments
     :align center
   :font
     :size 12px
+
+#acces_denied
+  :text
+    :align center
+  :font
+    :size 20px
+    :weight bold
+  :color black
+  :margin
+    :top 200px
 
 .text-right
   :text

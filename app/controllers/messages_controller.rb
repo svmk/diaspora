@@ -14,6 +14,8 @@ class MessagesController < ApplicationController
                               :conversation_visibilities => {:person_id => current_user.person.id}).first
 
     if cnv
+      cur_user = ConversationVisibility.where(:conversation_id => params[:conversation_id],:person_id => current_user.person.id).first
+      if cur_user.editor and not cur_user.deleted then
       message = Message.new(:conversation_id => cnv.id, :text => params[:message][:text], :author => current_user.person)
       
       if message.save
@@ -24,6 +26,10 @@ class MessagesController < ApplicationController
       else
         render :nothing => true, :status => 406
       end
+    else
+      flash[:error] = t('.sending_prohibited')
+      redirect_to conversations_path(:conversation_id => cnv.id)
+    end
     else
       render :nothing => true, :status => 406
     end

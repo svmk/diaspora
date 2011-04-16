@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110319005509) do
+ActiveRecord::Schema.define(:version => 20110326095653) do
 
   create_table "aspect_memberships", :force => true do |t|
     t.integer  "aspect_id",  :null => false
@@ -76,6 +76,9 @@ ActiveRecord::Schema.define(:version => 20110319005509) do
     t.integer  "unread",          :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "owner"
+    t.boolean  "deleted"
+    t.boolean  "editor"
   end
 
   add_index "conversation_visibilities", ["conversation_id", "person_id"], :name => "index_conversation_visibilities_on_conversation_id_and_person_id", :unique => true
