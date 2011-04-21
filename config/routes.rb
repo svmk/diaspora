@@ -25,13 +25,13 @@ Diaspora::Application.routes.draw do
   resources :contacts
   resources :aspect_memberships, :only => [:destroy, :create]
 
-  match 'conversations/:conversation_id/afford_to_own/:person_id', :to => 'conversations#afford_to_own'
-  match 'conversations/:conversation_id/prohibit_owning/:person_id', :to => 'conversations#prohibit_owning'
-  match 'conversations/:conversation_id/allow_edit/:person_id', :to => 'conversations#allow_edit'
-  match 'conversations/:conversation_id/prohibit_edit/:person_id', :to => 'conversations#prohibit_edit'
-  match 'conversations/:conversation_id/delete_contact/:person_id', :to => 'conversations#delete_contact'
-  match 'conversations/:conversation_id/create_contact/:person_id', :to => 'conversations#create_contact'
-  match 'conversations/:conversation_id/new_contact', :to => 'conversations#new_contact'
+  match 'conversations/:conversation_id/afford_to_own/:person_id', :to => 'conversations#afford_to_own', :via => [:post]
+  match 'conversations/:conversation_id/prohibit_owning/:person_id', :to => 'conversations#prohibit_owning', :via => [:post]
+  match 'conversations/:conversation_id/allow_edit/:person_id', :to => 'conversations#allow_edit', :via => [:post]
+  match 'conversations/:conversation_id/prohibit_edit/:person_id', :to => 'conversations#prohibit_edit', :via => [:post]
+  match 'conversations/:conversation_id/delete_contact/:person_id', :to => 'conversations#delete_contact', :via => [:post]
+  match 'conversations/:conversation_id/create_contact/:person_id', :to => 'conversations#create_contact', :via => [:post]
+  match 'conversations/:conversation_id/new_contact', :to => 'conversations#new_contact', :via => [:get]
   resources :conversations do
     resources :messages, :only => [:create, :show]
     resource :conversation_visibility, :only => [:destroy], :path => '/visibility/'

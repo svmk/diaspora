@@ -21,7 +21,7 @@
   });
   function change_contact(people_id,url_path,people_url,it,class_name)
     {
-        g = $.ajax({url:url_path,async:false,cache:false});
+        g = $.ajax({url:url_path,async:false,cache:false,type:'POST'});
         if (g.status == 200)
         {
             if (g.responseText.indexOf('O') != -1)
@@ -120,7 +120,7 @@
         };
     }
 .contact_list_new
-  = search_field_tag :contact_search, "", :class => 'contact_list_search', :results => 5, :placeholder => t('shared.contact_list.all_contacts')
+  = search_field_tag :contact_search, "", :class => 'contact_list_search new_contact', :results => 5, :placeholder => t('shared.contact_list.all_contacts')
   %ul
     - active_records = @active_contacts.map{|rec| rec.person.id}
     - for contact in @active_contacts
