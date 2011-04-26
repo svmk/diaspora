@@ -32,6 +32,7 @@ javascripts:
     - public/javascripts/stream.js
     - public/javascripts/application.js
     - public/javascripts/search.js
+    - public/javascripts/conversation.js
   mobile:
     - public/javascripts/vendor/jquery144.min.js
     - public/javascripts/custom-mobile-scripting.js

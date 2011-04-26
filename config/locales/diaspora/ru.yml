@@ -142,7 +142,10 @@ ru:
       add_new_aspect: "add to new aspect"
       share_with: "Start sharing with %{name}"
     zero: "ни одного контакта"
-  conversations: 
+  conversations:
+    access_denied:
+      access_denied: "Доступ запрещен"
+      you_have_removed_from_the_conversation: "Вас удалили из диалога"
     helper: 
       new_messages: 
         few: "%{count} new messages"

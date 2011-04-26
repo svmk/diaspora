@@ -1,33 +1,9 @@
 -#   Copyright (c) 2010, Diaspora Inc.  This file is
 -#   licensed under the Affero General Public License version 3 or later.  See
 -#   the COPYRIGHT file.
+-#
+-#   look public/javascripts/conversation.js
 :javascript
-  function add_contact_hide_keyup(ev)
-  {
-    if (ev.keyCode == 27){ // Escape key
-        $('#add_avatar_container').animate({ opacity: "hide" },200);
-        $(document).unbind('click');
-        $(document).unbind('keyup');
-    }
-    if (ev.keyCode == 13){ // Enter key
-        $('.contact_list_new ul li:not(.hiding):first .right.add_delete_button span a:not(.hiding)').click()
-    }
-  }
-  function add_contact_hide(ev)
-    {
-      el = $('#add_avatar_container');
-      pos = $('#add_avatar_container').offset();
-      shadow_size = 12;
-      if (!(ev.pageX >= pos.left &&
-        ev.pageX <= (pos.left + el[0].clientWidth) &&
-        ev.pageY >= (pos.top - shadow_size) &&
-        ev.pageY <= (pos.top + el[0].clientHeight + shadow_size)))
-      {
-        $('#add_avatar_container').animate({ opacity: "hide" },200);
-        $(document).unbind('click');
-        $(document).unbind('keyup');
-      }
-    }
   $(document).ready(function(){
     $('a#add_avatar img').click(function(){
         $('#add_avatar_container').load('#{@url_new_contact}',function(){
